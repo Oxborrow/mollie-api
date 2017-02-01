@@ -1,5 +1,16 @@
 package nl.stil4m.mollie.concepts;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import nl.stil4m.mollie.Client;
 import nl.stil4m.mollie.ResponseOrError;
 import nl.stil4m.mollie.domain.CreatePayment;
@@ -8,16 +19,6 @@ import nl.stil4m.mollie.domain.Page;
 import nl.stil4m.mollie.domain.Payment;
 import nl.stil4m.mollie.domain.subpayments.ideal.CreateIdealPayment;
 import nl.stil4m.mollie.domain.subpayments.ideal.IdealPaymentOptions;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import static nl.stil4m.mollie.TestUtil.TEST_TIMEOUT;
 import static nl.stil4m.mollie.TestUtil.VALID_API_KEY;
 import static nl.stil4m.mollie.TestUtil.assertWithin;
@@ -48,7 +49,7 @@ public class PaymentsIntegrationTest {
         assertThat(all.getSuccess(), is(true));
         Issuer issuer = all.getData().getData().get(0);
 
-        ResponseOrError<Payment> payment = payments.create(new CreateIdealPayment(1.00, "Some description", "http://example.com", Optional.empty(), null, new IdealPaymentOptions(issuer.getId())));
+        ResponseOrError<Payment> payment = payments.create(new CreateIdealPayment(new BigDecimal("1.00"), "Some description", "http://example.com", Optional.empty(), null, new IdealPaymentOptions(issuer.getId())));
 
         assertThat(payment.getSuccess(), is(true));
         assertWithin(beforeTest, payment.getData().getCreatedDatetime(), new Date(), 5000L);
@@ -56,7 +57,7 @@ public class PaymentsIntegrationTest {
 
     @Test
     public void testGetPayment() throws IOException, InterruptedException {
-        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), 1.00, "Some description", "http://example.com", Optional.empty(), null));
+        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.empty(), null));
         String id = payment.getData().getId();
 
         ResponseOrError<Payment> paymentStatus = payments.get(id);
@@ -100,13 +101,13 @@ public class PaymentsIntegrationTest {
         Map<String, Object> meta = new HashMap<>();
         meta.put("foo", "bar");
 
-        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), 1.00, "Some description", "http://example.com", Optional.of("https://stil4m.github.io"), meta));
+        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.of("https://stil4m.github.io"), meta));
 
         Payment createdPayment = payment.getData();
         assertWithin(beforeTest, createdPayment.getCreatedDatetime(), new Date(), 5000L);
 
         assertThat(createdPayment.getMethod(), is(nullValue()));
-        assertThat(createdPayment.getAmount(), is(1.00));
+        assertThat(createdPayment.getAmount(), is(new BigDecimal("1.00")));
         assertThat(createdPayment.getDescription(), is("Some description"));
         assertThat(createdPayment.getId(), is(notNullValue()));
         assertThat(createdPayment.getDetails(), is(nullValue()));
@@ -125,13 +126,13 @@ public class PaymentsIntegrationTest {
         Map<String, Object> meta = new HashMap<>();
         meta.put("foo", "bar");
 
-        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.of("ideal"), 1.00, "Some description", "http://example.com", Optional.of("https://stil4m.github.io"), meta));
+        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.of("ideal"), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.of("https://stil4m.github.io"), meta));
 
         Payment createdPayment = payment.getData();
         assertWithin(beforeTest, createdPayment.getCreatedDatetime(), new Date(), 5000L);
 
         assertThat(createdPayment.getMethod(), is("ideal"));
-        assertThat(createdPayment.getAmount(), is(1.00));
+        assertThat(createdPayment.getAmount(), is(new BigDecimal("1.00")));
         assertThat(createdPayment.getDescription(), is("Some description"));
         assertThat(createdPayment.getId(), is(notNullValue()));
         assertThat(createdPayment.getDetails(), is(nullValue()));
@@ -150,12 +151,12 @@ public class PaymentsIntegrationTest {
         Map<String, Object> meta = new HashMap<>();
         meta.put("foo", "bar");
 
-        ResponseOrError<Payment> createResponse = payments.create(new CreatePayment(Optional.empty(), 1.00, "Some description", "http://example.com", Optional.of("https://stil4m.github.io"), meta));
+        ResponseOrError<Payment> createResponse = payments.create(new CreatePayment(Optional.empty(), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.of("https://stil4m.github.io"), meta));
         ResponseOrError<Payment> paymentResponse = payments.get(createResponse.getData().getId());
         Payment payment = paymentResponse.getData();
 
         assertThat(payment.getMethod(), is(nullValue()));
-        assertThat(payment.getAmount(), is(1.00));
+        assertThat(payment.getAmount(), is(new BigDecimal("1.00")));
         assertThat(payment.getDescription(), is("Some description"));
         assertThat(payment.getId(), is(notNullValue()));
         assertThat(payment.getDetails(), is(nullValue()));
@@ -174,12 +175,12 @@ public class PaymentsIntegrationTest {
         Map<String, Object> meta = new HashMap<>();
         meta.put("foo", "bar");
 
-        ResponseOrError<Payment> createResponse = payments.create(new CreatePayment(Optional.of("creditcard"), 2.00, "Some credit card description", "http://example.com", Optional.of("https://stil4m.github.io"), meta));
+        ResponseOrError<Payment> createResponse = payments.create(new CreatePayment(Optional.of("creditcard"), new BigDecimal("2.00"), "Some credit card description", "http://example.com", Optional.of("https://stil4m.github.io"), meta));
         ResponseOrError<Payment> paymentResponse = payments.get(createResponse.getData().getId());
         Payment payment = paymentResponse.getData();
 
         assertThat(payment.getMethod(), is("creditcard"));
-        assertThat(payment.getAmount(), is(2.00));
+        assertThat(payment.getAmount(), is(new BigDecimal("2.00")));
         assertThat(payment.getDescription(), is("Some credit card description"));
         assertThat(payment.getId(), is(notNullValue()));
         assertThat(payment.getDetails(), is(notNullValue())); // feeRegion=other

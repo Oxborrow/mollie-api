@@ -1,20 +1,22 @@
 package nl.stil4m.mollie.domain;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class CreatePayment {
 
-    private final Double amount;
+    private final BigDecimal amount;
     private final String description;
     private final String redirectUrl;
     private final Optional<String> webhookUrl;
     private final Optional<String> method;
     private final Map<String, Object> metadata;
 
-    public CreatePayment(@Nonnull Optional<String> method, @Nonnull Double amount, @Nonnull String description, @Nonnull String redirectUrl, @Nonnull Optional<String> webhookUrl, @Nullable Map<String, Object> metadata) {
+    public CreatePayment(@Nonnull Optional<String> method, @Nonnull BigDecimal amount, @Nonnull String description, @Nonnull String redirectUrl, @Nonnull Optional<String> webhookUrl, @Nullable Map<String, Object> metadata) {
         this.method = method;
         this.amount = amount;
         this.description = description;
@@ -24,7 +26,7 @@ public class CreatePayment {
     }
 
     @Nonnull
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 

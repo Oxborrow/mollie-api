@@ -1,5 +1,15 @@
 package nl.stil4m.mollie.concepts;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import nl.stil4m.mollie.Client;
 import nl.stil4m.mollie.ResponseOrError;
 import nl.stil4m.mollie.domain.CreatePayment;
@@ -7,15 +17,6 @@ import nl.stil4m.mollie.domain.CreateRefund;
 import nl.stil4m.mollie.domain.Page;
 import nl.stil4m.mollie.domain.Payment;
 import nl.stil4m.mollie.domain.Refund;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import static nl.stil4m.mollie.TestUtil.TEST_TIMEOUT;
 import static nl.stil4m.mollie.TestUtil.VALID_API_KEY;
 import static nl.stil4m.mollie.TestUtil.strictClientWithApiKey;
@@ -37,7 +38,7 @@ public class PaymentRefundsIntegrationTest {
 
     @Test
     public void testGetPaymentRefunds() throws IOException, URISyntaxException, InterruptedException {
-        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), 1.00, "Some description", "http://example.com", Optional.empty(), null));
+        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.empty(), null));
         String id = payment.getData().getId();
         PaymentRefunds refunds = client.paymentRefunds(id);
 
@@ -52,7 +53,7 @@ public class PaymentRefundsIntegrationTest {
 
     @Test
     public void testListRefundsForExistingPayment() throws IOException, URISyntaxException, InterruptedException {
-        Payment payment = payments.create(new CreatePayment(Optional.empty(), 1.00, "Some description", "http://example.com", Optional.empty(), null)).getData();
+        Payment payment = payments.create(new CreatePayment(Optional.empty(), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.empty(), null)).getData();
         PaymentRefunds refunds = client.paymentRefunds(payment.getId());
 
         ResponseOrError<Page<Refund>> all = refunds.all(Optional.empty(), Optional.empty());
@@ -68,7 +69,7 @@ public class PaymentRefundsIntegrationTest {
         Map<String, String> errorData = new HashMap<>();
         errorData.put("type", "request");
         errorData.put("message", "The refund id is invalid");
-        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), 1.00, "Some description", "http://example.com", Optional.empty(), null));
+        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.empty(), null));
         assertThat(payment.getSuccess(), is(true));
         PaymentRefunds refunds = client.paymentRefunds(payment.getData().getId());
 
@@ -83,7 +84,7 @@ public class PaymentRefundsIntegrationTest {
         Map<String, String> errorData = new HashMap<>();
         errorData.put("type", "request");
         errorData.put("message", "The refund id is invalid");
-        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), 1.00, "Some description", "http://example.com", Optional.empty(), null));
+        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.empty(), null));
         PaymentRefunds refunds = client.paymentRefunds(payment.getData().getId());
 
         ResponseOrError<Refund> get = refunds.get("foo_bar");
@@ -97,10 +98,10 @@ public class PaymentRefundsIntegrationTest {
         Map<String, String> errorData = new HashMap<>();
         errorData.put("type", "request");
         errorData.put("message", "The payment is already refunded or has not been paid for yet");
-        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), 1.00, "Some description", "http://example.com", Optional.empty(), null));
+        ResponseOrError<Payment> payment = payments.create(new CreatePayment(Optional.empty(), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.empty(), null));
         PaymentRefunds refunds = client.paymentRefunds(payment.getData().getId());
 
-        CreateRefund createRefund = new CreateRefund(1.00);
+        CreateRefund createRefund = new CreateRefund(new BigDecimal("1.00"));
         ResponseOrError<Refund> create = refunds.create(createRefund);
 
         assertThat(create.getSuccess(), is(false));

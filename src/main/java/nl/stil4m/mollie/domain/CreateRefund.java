@@ -1,16 +1,18 @@
 package nl.stil4m.mollie.domain;
 
-import javax.annotation.Nullable;
+import java.math.BigDecimal;
 import java.util.Optional;
 
-public class CreateRefund {
-    private final Optional<Double> amount;
+import javax.annotation.Nullable;
 
-    public CreateRefund(@Nullable Double amount) {
+public class CreateRefund {
+    private final Optional<BigDecimal> amount;
+
+    public CreateRefund(@Nullable BigDecimal amount) {
         this.amount = Optional.ofNullable(amount);
     }
 
-    public Optional<Double> getAmount() {
+    public Optional<BigDecimal> getAmount() {
         return amount;
     }
 }

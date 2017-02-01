@@ -1,10 +1,11 @@
 package nl.stil4m.mollie.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Payment {
 
@@ -19,9 +20,9 @@ public class Payment {
     private final String paidDatetime;
     private final String cancelledDatetime;
     private final String expiredDatetime;
-    private final Double amount;
-    private final Double amountRefunded;
-    private final Double amountRemaining;
+    private final BigDecimal amount;
+    private final BigDecimal amountRefunded;
+    private final BigDecimal amountRemaining;
     private final String description;
     private final String method;
     private final Map<String, Object> details;
@@ -43,9 +44,9 @@ public class Payment {
                    @JsonProperty("paidDatetime") String paidDatetime,
                    @JsonProperty("cancelledDatetime") String cancelledDatetime,
                    @JsonProperty("expiredDatetime") String expiredDatetime,
-                   @JsonProperty("amount") Double amount,
-                   @JsonProperty("amountRefunded") Double amountRefunded,
-                   @JsonProperty("amountRemaining") Double amountRemaining,
+                   @JsonProperty("amount") BigDecimal amount,
+                   @JsonProperty("amountRefunded") BigDecimal amountRefunded,
+                   @JsonProperty("amountRemaining") BigDecimal amountRemaining,
                    @JsonProperty("description") String description,
                    @JsonProperty("method") String method,
                    @JsonProperty("details") Map<String, Object> details,
@@ -124,15 +125,15 @@ public class Payment {
         return expiredDatetime;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public Double getAmountRefunded() {
+    public BigDecimal getAmountRefunded() {
         return amountRefunded;
     }
 
-    public Double getAmountRemaining() {
+    public BigDecimal getAmountRemaining() {
         return amountRemaining;
     }
 

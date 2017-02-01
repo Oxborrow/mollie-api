@@ -1,18 +1,19 @@
 package nl.stil4m.mollie.concepts;
 
-import nl.stil4m.mollie.ResponseOrError;
-import nl.stil4m.mollie.domain.Method;
-import nl.stil4m.mollie.domain.Page;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.junit.Before;
+import org.junit.Test;
+
+import nl.stil4m.mollie.ResponseOrError;
+import nl.stil4m.mollie.domain.Method;
+import nl.stil4m.mollie.domain.Page;
 import static nl.stil4m.mollie.TestUtil.TEST_TIMEOUT;
 import static nl.stil4m.mollie.TestUtil.VALID_API_KEY;
 import static nl.stil4m.mollie.TestUtil.strictClientWithApiKey;
@@ -56,8 +57,8 @@ public class MethodsIntegrationTest {
         Method method = methodResponse.getData();
         assertThat(method.getId(), is("ideal"));
         assertThat(method.getDescription(), is("iDEAL"));
-        assertThat(method.getAmount().getMinimum(), is(0.36));
-        assertThat(method.getAmount().getMaximum(), is(50000.0));
+        assertThat(method.getAmount().getMinimum(), is(new BigDecimal("0.36")));
+        assertThat(method.getAmount().getMaximum(), is(new BigDecimal("50000.00")));
         assertThat(method.getImage().getNormal(), is("https://www.mollie.com/images/payscreen/methods/ideal.png"));
         assertThat(method.getImage().getBigger(), is("https://www.mollie.com/images/payscreen/methods/ideal@2x.png"));
     }

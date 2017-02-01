@@ -1,5 +1,19 @@
 package nl.stil4m.mollie.concepts;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import nl.stil4m.mollie.Client;
 import nl.stil4m.mollie.ResponseOrError;
 import nl.stil4m.mollie.TestUtil;
@@ -12,18 +26,6 @@ import nl.stil4m.mollie.domain.Payment;
 import nl.stil4m.mollie.domain.customerpayments.FirstRecurringPayment;
 import nl.stil4m.mollie.domain.customerpayments.NormalCustomerPayment;
 import nl.stil4m.mollie.domain.customerpayments.RecurringPayment;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
 import static nl.stil4m.mollie.TestUtil.TEST_TIMEOUT;
 import static nl.stil4m.mollie.TestUtil.VALID_API_KEY;
 import static nl.stil4m.mollie.TestUtil.strictClientWithApiKey;
@@ -63,7 +65,7 @@ public class CustomerPaymentsIntegrationTest {
     public void testCreateNormalCustomerPayment() throws IOException, URISyntaxException {
         // https://www.mollie.com/nl/docs/reference/payments/create
         Optional<String> method = Optional.empty();
-        double amount = 1.00;
+        BigDecimal amount = new BigDecimal("1.00");
         String description = "Some description";
         String redirectUrl = "https://example.com/thank/you";
         Optional<String> webhookUrl = Optional.of("https://example.com/api/payment");
@@ -81,7 +83,7 @@ public class CustomerPaymentsIntegrationTest {
 
     @Test
     public void testCreateFirstRecurringPayment() throws IOException, URISyntaxException {
-        CreatePayment createPayment = new CreatePayment(Optional.empty(), 1.00, "Some description", "http://example.com", Optional.empty(), null);
+        CreatePayment createPayment = new CreatePayment(Optional.empty(), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.empty(), null);
         CustomerPayment payment = new FirstRecurringPayment(createPayment);
 
         ResponseOrError<Payment> result = customerPayments.create(payment);
@@ -94,7 +96,7 @@ public class CustomerPaymentsIntegrationTest {
     @Test
     @Ignore
     public void testCreateRecurringPayment() throws IOException, URISyntaxException {
-        CreatePayment firstPayment = new TestCreatePayment(1.00, "Some description", "http://example.com");
+        CreatePayment firstPayment = new TestCreatePayment(new BigDecimal("1.00"), "Some description", "http://example.com");
         ResponseOrError<Payment> firstResult = customerPayments.create(new FirstRecurringPayment(firstPayment));
         assertThat(firstResult.getSuccess(), is(true));
         /**
@@ -104,7 +106,7 @@ public class CustomerPaymentsIntegrationTest {
          *
          * After that a customer has a valid Mandate (perhaps create mandate using API?)
          */
-        CreatePayment recurringPayment = new CreatePayment(Optional.empty(), 1.00, "Some description", "http://example.com", Optional.empty(), null);
+        CreatePayment recurringPayment = new CreatePayment(Optional.empty(), new BigDecimal("1.00"), "Some description", "http://example.com", Optional.empty(), null);
         CustomerPayment payment = new RecurringPayment(recurringPayment);
 
         ResponseOrError<Payment> result = customerPayments.create(payment);
@@ -116,7 +118,7 @@ public class CustomerPaymentsIntegrationTest {
 
         private final String issuer = TestUtil.TEST_ISSUER;
 
-        private TestCreatePayment(Double amount, String description, String redirectUrl) {
+        private TestCreatePayment(BigDecimal amount, String description, String redirectUrl) {
             super(Optional.of("ideal"), amount, description, redirectUrl, Optional.empty(), null);
         }
 

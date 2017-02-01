@@ -1,9 +1,10 @@
 package nl.stil4m.mollie.domain;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.Date;
 
 public class Refund {
 
@@ -11,7 +12,7 @@ public class Refund {
 
     private final Payment payment;
 
-    private final Double amount;
+    private final BigDecimal amount;
 
     private final String status;
 
@@ -22,7 +23,7 @@ public class Refund {
     @JsonCreator
     public Refund(@JsonProperty("id") String id,
                   @JsonProperty("payment") Payment payment,
-                  @JsonProperty("amount") Double amount,
+                  @JsonProperty("amount") BigDecimal amount,
                   @JsonProperty("status") String status,
                   @JsonProperty("refundedDatetime") Date refundedDatetime,
                   @JsonProperty("links") RefundLinks links) {
@@ -42,7 +43,7 @@ public class Refund {
         return payment;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
