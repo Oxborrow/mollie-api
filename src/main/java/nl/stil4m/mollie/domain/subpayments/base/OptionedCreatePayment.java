@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import nl.stil4m.mollie.domain.CreatePayment;
 
-public abstract class OptionedCreatePayment<T> extends CreatePayment {
+public abstract class OptionedCreatePayment<T extends PaymentOptions> extends CreatePayment {
 
     @JsonUnwrapped
     private final T options;
@@ -24,4 +24,5 @@ public abstract class OptionedCreatePayment<T> extends CreatePayment {
     public T getOptions() {
         return options;
     }
+
 }

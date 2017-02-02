@@ -1,38 +1,40 @@
 package nl.stil4m.mollie.domain.subpayments.paypal;
 
-public class PayPalOptions {
+import nl.stil4m.mollie.domain.subpayments.base.AbstractPaymentOptions;
 
-    private final String shippingAddress;
-    private final String shippingCity;
-    private final String shippingRegion;
-    private final String shippingPostal;
-    private final String shippingCountry;
+public class PayPalOptions extends AbstractPaymentOptions {
+
+    public static final String SHIPPING_ADDRESS = "shippingAddress";
+    public static final String SHIPPING_CITY = "shippingCity";
+    public static final String SHIPPING_REGION = "shippingRegion";
+    public static final String SHIPPING_POSTAL = "shippingPostal";
+    public static final String SHIPPING_COUNTRY = "shippingCountry";
 
     public PayPalOptions(String shippingAddress, String shippingCity, String shippingRegion, String shippingPostal, String shippingCountry) {
-        this.shippingAddress = shippingAddress;
-        this.shippingCity = shippingCity;
-        this.shippingRegion = shippingRegion;
-        this.shippingPostal = shippingPostal;
-        this.shippingCountry = shippingCountry;
+        getParameters().put(SHIPPING_ADDRESS, shippingAddress);
+        getParameters().put(SHIPPING_CITY, shippingCity);
+        getParameters().put(SHIPPING_REGION, shippingRegion);
+        getParameters().put(SHIPPING_POSTAL, shippingPostal);
+        getParameters().put(SHIPPING_COUNTRY, shippingCountry);
     }
 
     public String getShippingAddress() {
-        return shippingAddress;
+        return getParameters().get(SHIPPING_ADDRESS);
     }
 
     public String getShippingCity() {
-        return shippingCity;
+        return getParameters().get(SHIPPING_CITY);
     }
 
     public String getShippingRegion() {
-        return shippingRegion;
+        return getParameters().get(SHIPPING_REGION);
     }
 
     public String getShippingPostal() {
-        return shippingPostal;
+        return getParameters().get(SHIPPING_POSTAL);
     }
 
     public String getShippingCountry() {
-        return shippingCountry;
+        return getParameters().get(SHIPPING_COUNTRY);
     }
 }

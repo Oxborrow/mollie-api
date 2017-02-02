@@ -1,70 +1,44 @@
 package nl.stil4m.mollie.domain.subpayments.creditcard;
 
-public class CreditCardOptions {
+import nl.stil4m.mollie.domain.subpayments.paypal.PayPalOptions;
 
+public class CreditCardOptions extends PayPalOptions {
 
-    private final String billingAddress;
-    private final String billingCity;
-    private final String billingRegion;
-    private final String billingPostal;
-    private final String billingCountry;
-    private final String shippingAddress;
-    private final String shippingCity;
-    private final String shippingRegion;
-    private final String shippingPostal;
-    private final String shippingCountry;
+    public static final String BILLING_ADDRESS = "billingAddress";
+    public static final String BILLING_CITY = "billingCity";
+    public static final String BILLING_REGION = "billingRegion";
+    public static final String BILLING_POSTAL = "billingPostal";
+    public static final String BILLING_COUNTRY = "billingCountry";
 
     public CreditCardOptions(String billingAddress, String billingCity, String billingRegion, String billingPostal, String billingCountry,
                              String shippingAddress, String shippingCity, String shippingRegion, String shippingPostal, String shippingCountry) {
-        this.billingAddress = billingAddress;
-        this.billingCity = billingCity;
-        this.billingRegion = billingRegion;
-        this.billingPostal = billingPostal;
-        this.billingCountry = billingCountry;
-        this.shippingAddress = shippingAddress;
-        this.shippingCity = shippingCity;
-        this.shippingRegion = shippingRegion;
-        this.shippingPostal = shippingPostal;
-        this.shippingCountry = shippingCountry;
+        super(shippingAddress, shippingCity, shippingRegion, shippingPostal, shippingCountry);
+        getParameters().put(BILLING_ADDRESS, billingAddress);
+        getParameters().put(BILLING_CITY, billingCity);
+        getParameters().put(BILLING_REGION, billingRegion);
+        getParameters().put(BILLING_POSTAL, billingPostal);
+        getParameters().put(BILLING_COUNTRY, billingCountry);
     }
 
     public String getBillingAddress() {
-        return billingAddress;
+        return getParameters().get(BILLING_ADDRESS);
     }
 
     public String getBillingCity() {
-        return billingCity;
+        return getParameters().get(BILLING_CITY);
     }
 
     public String getBillingRegion() {
-        return billingRegion;
+        return getParameters().get(BILLING_REGION);
     }
 
     public String getBillingPostal() {
-        return billingPostal;
+        return getParameters().get(BILLING_POSTAL);
     }
 
     public String getBillingCountry() {
-        return billingCountry;
+        return getParameters().get(BILLING_COUNTRY);
     }
 
-    public String getShippingAddress() {
-        return shippingAddress;
-    }
 
-    public String getShippingCity() {
-        return shippingCity;
-    }
-
-    public String getShippingRegion() {
-        return shippingRegion;
-    }
-
-    public String getShippingPostal() {
-        return shippingPostal;
-    }
-
-    public String getShippingCountry() {
-        return shippingCountry;
-    }
 }

@@ -1,14 +1,16 @@
 package nl.stil4m.mollie.domain.subpayments.paysafecard;
 
-public class PaySafeCardOptions {
+import nl.stil4m.mollie.domain.subpayments.base.AbstractPaymentOptions;
 
-    private final String customerReference;
+public class PaySafeCardOptions extends AbstractPaymentOptions {
+
+    public static final String CUSTOMER_REFERENCE = "customerReference";
 
     public PaySafeCardOptions(String customerReference) {
-        this.customerReference = customerReference;
+        getParameters().put(CUSTOMER_REFERENCE, customerReference);
     }
 
     public String getCustomerReference() {
-        return customerReference;
+        return getParameters().get(CUSTOMER_REFERENCE);
     }
 }

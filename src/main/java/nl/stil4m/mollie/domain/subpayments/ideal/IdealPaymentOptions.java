@@ -1,14 +1,16 @@
 package nl.stil4m.mollie.domain.subpayments.ideal;
 
-public class IdealPaymentOptions {
+import nl.stil4m.mollie.domain.subpayments.base.AbstractPaymentOptions;
 
-    private final String issuer;
+public class IdealPaymentOptions extends AbstractPaymentOptions {
+
+    public static final String ISSUER = "issuer";
 
     public IdealPaymentOptions(String issuer) {
-        this.issuer = issuer;
+        getParameters().put(ISSUER, issuer);
     }
 
     public String getIssuer() {
-        return issuer;
+        return getParameters().get(ISSUER);
     }
 }
